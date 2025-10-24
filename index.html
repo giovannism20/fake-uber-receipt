@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Recibo Uber</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Dados do Recibo</h2>
+            <form id="receiptForm">
+                <div class="form-group">
+                    <label>Data</label>
+                    <input type="text" id="date" value="23 de setembro de 2025">
+                </div>
+                <div class="form-group">
+                    <label>Nome do Passageiro</label>
+                    <input type="text" id="passengerName" value="Lorem">
+                </div>
+                <div class="form-group">
+                    <label>Período da Viagem</label>
+                    <select id="tripPeriod">
+                        <option value="manhã">Manhã</option>
+                        <option value="tarde">Tarde</option>
+                        <option value="noite" selected>Noite</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Preço da Viagem (R$)</label>
+                    <input type="text" id="tripPrice" value="19,53">
+                </div>
+                <div class="form-group">
+                    <label>Taxa de Intermediação (R$)</label>
+                    <input type="text" id="fee" value="0,90">
+                </div>
+                <div class="form-group">
+                    <label>Custo Fixo (R$)</label>
+                    <input type="text" id="fixedCost" value="1,55">
+                </div>
+                <div class="form-group">
+                    <label>Método de Pagamento</label>
+                    <input type="text" id="paymentMethod" value="PIX">
+                </div>
+                <div class="form-group">
+                    <label>Data/Hora do Pagamento</label>
+                    <input type="text" id="paymentDateTime" value="23/9/2025 21:01">
+                </div>
+                <div class="form-group">
+                    <label>Nome do Motorista</label>
+                    <input type="text" id="driverName" value="Denilson">
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Viagem</label>
+                    <input type="text" id="tripType" value="UberX">
+                </div>
+                <div class="form-group">
+                    <label>Distância (Km)</label>
+                    <input type="text" id="distance" value="11.79">
+                </div>
+                <div class="form-group">
+                    <label>Duração (minutos)</label>
+                    <input type="text" id="duration" value="14">
+                </div>
+                <div class="form-group">
+                    <label>Horário de Partida</label>
+                    <input type="text" id="startTime" value="20:46">
+                </div>
+                <div class="form-group">
+                    <label>Endereço de Partida</label>
+                    <input type="text" id="startAddress"
+                        value="R. Teles, 129 - Campinho, Rio de Janeiro - RJ, 00000-000, Brasil">
+                </div>
+                <div class="form-group">
+                    <label>Horário de Chegada</label>
+                    <input type="text" id="endTime" value="21:01">
+                </div>
+                <div class="form-group">
+                    <label>Endereço de Chegada</label>
+                    <input type="text" id="endAddress"
+                        value="Av. dos Democráticos, 1322 - Higienópolis, Rio de Janeiro - RJ, 21050-144, Brasil">
+                </div>
+                <button type="button" class="btn-generate" onclick="generateReceipt()">Gerar Recibo</button>
+                <button type="button" class="btn-print" onclick="window.print()">Imprimir/Salvar PDF</button>
+            </form>
+        </div>
+
+        <div class="receipt-container">
+            <div class="header">
+                <div class="logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="Uber">
+                </div>
+                <div class="date" id="displayDate">23 de setembro de 2025</div>
+            </div>
+
+            <h1 class="title" id="displayTitle">Obrigado por escolher a Uber, Lorem</h1>
+            <p class="subtitle" id="displaySubtitle">Esperamos que você tenha gostado da viagem hoje à noite.</p>
+
+            <div class="total-section">
+                <div class="total-label">Total</div>
+                <div class="total-value" id="displayTotal">R$ 20,97</div>
+            </div>
+
+            <div class="details-section">
+                <div class="detail-row">
+                    <span class="detail-label">Preço da viagem</span>
+                    <span class="detail-value" id="displayTripPrice">R$ 19,53</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Taxa de intermediação</span>
+                    <span class="detail-value" id="displayFee">R$ 0,90</span>
+                </div>
+            </div>
+
+            <div class="breakdown-section">
+                <div class="breakdown-row">
+                    <span class="breakdown-label subtotal">Subtotal</span>
+                    <span class="breakdown-value" id="displaySubtotal">R$ 20,43</span>
+                </div>
+                <div class="breakdown-row">
+                    <span class="breakdown-label">Custo fixo</span>
+                    <span class="breakdown-value" id="displayFixedCost">R$ 1,55</span>
+                </div>
+            </div>
+
+            <div class="payment-section">
+                <div class="payment-title">Pagamentos</div>
+                <div class="payment-method">
+                    <div class="payment-info">
+                        <picture class="payment-icon" id="displayPaymentIcon">
+                            <img src="public/pix.png" alt="PIX">
+                        </picture>
+                        <div>
+                            <div class="payment-details" id="displayPaymentMethod">PIX</div>
+                            <div class="payment-date" id="displayPaymentDateTime">23/9/2025 21:01</div>
+                        </div>
+                    </div>
+                    <div class="payment-amount" id="displayPaymentAmount">R$ 20,97</div>
+                </div>
+                <div class="link-section">
+                    Para mais informações,<a href="https://riders.uber.com/trips/e93856e5-b9f7-4196-911f-96bed9212765">acesse a página da sua viagem</a>
+                </div>
+            </div>
+
+            <div class="payment-split"></div>
+
+            <div class="trip-section">
+                <div class="trip-title" id="displayDriverName">Você viajou com Denilson</div>
+                <div class="trip-info" id="displayTripInfo"><b>UberX</b> 11.79 Quilômetros | 14 minutes</div>
+
+                <div class="location-wrapper">
+                    <div class="location-row">
+                        <div class="location-icon">
+                            <div class="location-icon-dot"></div>
+                        </div>
+                        <div class="location-details">
+                            <span class="location-time" id="displayStartTime">20:46 |</span>
+                            <span class="location-address" id="displayStartAddress">R. Teles, 129 - Campinho, Rio de
+                                Janeiro - RJ, 00000-000, Brasil</span>
+                        </div>
+                    </div>
+                    <div class="location-row">
+                        <div class="location-icon">
+                            <div class="location-icon-dot"></div>
+                        </div>
+                        <div class="location-details">
+                            <span class="location-time" id="displayEndTime">21:01 |</span>
+                            <span class="location-address" id="displayEndAddress">Av. dos Democráticos, 1322 -
+                                Higienópolis, Rio de Janeiro - RJ, 21050-144, Brasil</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-note">
+                O preço de serviço não inclui taxas que possam ser cobradas pelo seu banco. Entre em contato diretamente
+                com o seu banco para mais informações.
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
