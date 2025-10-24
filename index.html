@@ -86,7 +86,6 @@
             box-sizing: border-box;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
-            color-adjust: exact !important;
         }
 
         body {
@@ -133,7 +132,18 @@
             font-size: 0.875rem;
         }
 
-        .form-group input:focus {
+        .form-group select {
+            width: 100%;
+            padding: 0.625rem;
+            border: 0.0625rem solid #ddd;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
             border-color: var(--black-900);
         }
@@ -200,19 +210,18 @@
         .title {
             font-size: 1.5rem;
             font-weight: 400;
-            margin: 2rem 0 1.5rem 0;
+            margin: 2rem 0 2.0rem 0;
         }
 
         .subtitle {
             font-size: 0.875rem;
-            margin-bottom: 1.875rem;
         }
 
         .total-section {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.25rem 0;
+            padding: 1.00rem 0;
         }
 
         .total-label {
@@ -425,19 +434,16 @@
             * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-                color-adjust: exact !important;
             }
 
             .location-wrapper::before {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-                color-adjust: exact !important;
             }
 
             .location-icon .location-icon-dot {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-                color-adjust: exact !important;
             }
         }
 
@@ -461,6 +467,14 @@
                 <div class="form-group">
                     <label>Nome do Passageiro</label>
                     <input type="text" id="passengerName" value="Lorem">
+                </div>
+                <div class="form-group">
+                    <label>Período da Viagem</label>
+                    <select id="tripPeriod">
+                        <option value="manhã">Manhã</option>
+                        <option value="tarde">Tarde</option>
+                        <option value="noite" selected>Noite</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Preço da Viagem (R$)</label>
@@ -534,7 +548,7 @@
             </div>
 
             <h1 class="title" id="displayTitle">Obrigado por escolher a Uber, Lorem</h1>
-            <p class="subtitle">Esperamos que você tenha gostado da viagem hoje à noite.</p>
+            <p class="subtitle" id="displaySubtitle">Esperamos que você tenha gostado da viagem hoje à noite.</p>
 
             <div class="total-section">
                 <div class="total-label">Total</div>
@@ -582,13 +596,13 @@
                     <div class="payment-amount" id="displayPaymentAmount">R$ 20,97</div>
                 </div>
                 <div class="link-section">
-                    Para mais informações, <a href="#">acesse a página da sua viagem</a>
+                    Para mais informações,<a href="#">acesse a página da sua viagem</a>
                 </div>
             </div>
 
             <div class="trip-section">
                 <div class="trip-title" id="displayDriverName">Você viajou com Denilson</div>
-                <div class="trip-info" id="displayTripInfo"><b>UberX</b> 11.79 Quilômetros | 14 minutos</div>
+                <div class="trip-info" id="displayTripInfo"><b>UberX</b> 11.79 Quilômetros | 14 minutes</div>
 
                 <div class="location-wrapper">
 
@@ -638,6 +652,7 @@
             // Obter valores do formulário
             const date = document.getElementById('date').value;
             const passengerName = document.getElementById('passengerName').value;
+            const tripPeriod = document.getElementById('tripPeriod').value;
             const tripPrice = parseValue(document.getElementById('tripPrice').value);
             const fee = parseValue(document.getElementById('fee').value);
             const fixedCost = parseValue(document.getElementById('fixedCost').value);
@@ -657,9 +672,20 @@
             const subtotal = tripPrice + fee;
             const total = subtotal + fixedCost - discount;
 
+            // Definir mensagem do período
+            let periodMessage = '';
+            if (tripPeriod === 'manhã') {
+                periodMessage = 'hoje de manhã';
+            } else if (tripPeriod === 'tarde') {
+                periodMessage = 'hoje à tarde';
+            } else {
+                periodMessage = 'hoje à noite';
+            }
+
             // Atualizar recibo
             document.getElementById('displayDate').textContent = date;
             document.getElementById('displayTitle').textContent = `Obrigado por escolher a Uber, ${passengerName}`;
+            document.getElementById('displaySubtitle').textContent = `Esperamos que você tenha gostado da viagem ${periodMessage}.`;
             document.getElementById('displayTotal').textContent = `R$ ${formatValue(total)}`;
             document.getElementById('displayTripPrice').textContent = `R$ ${formatValue(tripPrice)}`;
             document.getElementById('displayFee').textContent = `R$ ${formatValue(fee)}`;
@@ -679,7 +705,7 @@
             document.getElementById('displayPaymentDateTime').textContent = paymentDateTime;
             document.getElementById('displayPaymentAmount').textContent = `R$ ${formatValue(total)}`;
             document.getElementById('displayDriverName').textContent = `Você viajou com ${driverName}`;
-            document.getElementById('displayTripInfo').innerHTML = `<span>${tripType}</span> ${distance} Quilômetros | ${duration} <br> minutos`;
+            document.getElementById('displayTripInfo').innerHTML = `<span>${tripType}</span> ${distance} Quilômetros | ${duration} <br> minutes`;
             document.getElementById('displayStartTime').textContent = `${startTime} |`;
             document.getElementById('displayStartAddress').textContent = startAddress;
             document.getElementById('displayEndTime').textContent = `${endTime} |`;
