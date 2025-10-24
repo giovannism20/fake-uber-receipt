@@ -70,8 +70,7 @@
         }
 
         .details-section,
-        .breakdown-section,
-        .payment-section {
+        .breakdown-section {
             border-bottom: 0.0625rem solid #e0e0e0;
         }
 
@@ -182,9 +181,20 @@
         }
 
         .receipt-container {
-            padding-inline: 7rem;
             padding-block: 4rem;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+        }
+
+        .header,
+        .title,
+        .subtitle,
+        .total-section,
+        .details-section,
+        .breakdown-section,
+        .payment-section,
+        .trip-section,
+        .footer-note {
+            margin-inline: 7rem !important;
         }
 
         .header {
@@ -215,13 +225,14 @@
 
         .subtitle {
             font-size: 0.875rem;
+            margin-bottom: 1.5rem;
         }
 
         .total-section {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.00rem 0;
+            padding: .95rem 0;
         }
 
         .total-label {
@@ -262,6 +273,12 @@
 
         .payment-section {
             padding: 1.5rem 0;
+        }
+
+        .payment-split {
+            margin-inline: 5.5rem !important;
+            border-bottom: 0.0625rem solid #e0e0e0;
+            /* border-bottom: 0.0625rem solid #a33232; */
         }
 
         .payment-title {
@@ -408,7 +425,7 @@
 
         .footer-note {
             padding: 0 0;
-            font-size: 0.870rem;
+            font-size: 0.80rem;
             line-height: 1.2;
         }
 
@@ -598,6 +615,10 @@
                 <div class="link-section">
                     Para mais informações,<a href="#">acesse a página da sua viagem</a>
                 </div>
+            </div>
+
+            <div class="payment-split">
+
             </div>
 
             <div class="trip-section">
