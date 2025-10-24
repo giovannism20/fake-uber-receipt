@@ -6,6 +6,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Recibo Uber</title>
     <style>
+        :root {
+            --black-900: #000;
+            --black-600: #808080;
+            --black-300: #e0e0e0;
+            --black-100: #f5f5f5;
+            --white-100: #ffffff;
+        }
+
+        .form-container h2,
+        .btn-generate,
+        .title,
+        .total-label,
+        .total-value,
+        .breakdown-label,
+        .breakdown-value,
+        .payment-title,
+        .payment-details,
+        .payment-amount,
+        .trip-title,
+        .trip-info span,
+        .location-time {
+            color: var(--black-900);
+        }
+
+        #displayFixedCost,
+        .detail-value,
+        .form-group label,
+        .date,
+        .subtitle,
+        .detail-label,
+        .payment-date,
+        .trip-info,
+        .location-address,
+        .footer-note,
+        #date {
+            color: var(--black-600);
+        }
+
+        .btn-generate {
+            background-color: var(--black-900);
+        }
+
+        .receipt-container {
+            background-color: var(--white-100);
+        }
+
+        .header,
+        .total-section {
+            border-bottom: 2px solid var(--black-300);
+        }
+
+        .location-row:first-of-type .location-icon::after {
+            background-color: var(--black-300);
+        }
+
+        .details-section,
+        .breakdown-section,
+        .payment-section {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
         @page {
             margin: 0;
             size: auto;
@@ -40,7 +101,6 @@
 
         .form-container h2 {
             margin-bottom: 20px;
-            color: #000;
         }
 
         .form-group {
@@ -50,7 +110,6 @@
         .form-group label {
             display: block;
             margin-bottom: 5px;
-            color: #333;
             font-size: 14px;
             font-weight: 500;
         }
@@ -65,13 +124,12 @@
 
         .form-group input:focus {
             outline: none;
-            border-color: #000;
+            border-color: var(--black-900);
         }
 
         .btn-generate {
             width: 100%;
             padding: 12px;
-            background-color: #000;
             color: white;
             border: none;
             border-radius: 4px;
@@ -82,13 +140,13 @@
         }
 
         .btn-generate:hover {
-            background-color: #333;
+            background-color: var(--black-600);
         }
 
         .btn-print {
             width: 100%;
             padding: 12px;
-            background-color: #00d4aa;
+            background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 4px;
@@ -99,11 +157,10 @@
         }
 
         .btn-print:hover {
-            background-color: #00c29a;
+            background-color: var(--primary-color-dark);
         }
 
         .receipt-container {
-            background-color: white;
             padding: 40px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
@@ -113,7 +170,6 @@
             justify-content: space-between;
             align-items: center;
             padding-bottom: 15px;
-            border-bottom: 2px solid #e0e0e0;
         }
 
         .logo {
@@ -127,19 +183,16 @@
 
         .date {
             font-size: 12px;
-            color: #666;
         }
 
         .title {
             font-size: 24px;
             font-weight: 400;
-            color: #000;
             margin: 32px 0 24px 0;
         }
 
         .subtitle {
             font-size: 14px;
-            color: #666;
             margin-bottom: 30px;
         }
 
@@ -148,24 +201,20 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 0;
-            border-bottom: 2px solid #e0e0e0;
         }
 
         .total-label {
             font-size: 18px;
             font-weight: 500;
-            color: #000;
         }
 
         .total-value {
             font-size: 18px;
             font-weight: 500;
-            color: #000;
         }
 
         .details-section {
             padding: 20px 0;
-            border-bottom: 1px solid #e0e0e0;
         }
 
         .detail-row {
@@ -175,17 +224,8 @@
             font-size: 14px;
         }
 
-        .detail-label {
-            color: #666;
-        }
-
-        .detail-value {
-            color: #000;
-        }
-
         .breakdown-section {
             padding: 20px 0;
-            border-bottom: 1px solid #e0e0e0;
         }
 
         .breakdown-row {
@@ -195,27 +235,17 @@
             font-size: 14px;
         }
 
-        .breakdown-label {
-            color: #000;
-        }
-
-        .breakdown-value {
-            color: #000;
-        }
-
         .discount {
             color: #0a0 !important;
         }
 
         .payment-section {
             padding: 24px 0;
-            border-bottom: 1px solid #e0e0e0;
         }
 
         .payment-title {
             font-size: 18px;
             font-weight: 500;
-            color: #000;
             margin-bottom: 15px;
         }
 
@@ -234,7 +264,7 @@
         .payment-icon {
             width: 30px;
             height: 30px;
-            background-color: #00d4aa;
+            background-color: var(--primary-color);
             border-radius: 4px;
             display: flex;
             align-items: center;
@@ -247,18 +277,15 @@
         .payment-details {
             font-size: 16px;
             margin-bottom: 6px;
-            color: #000;
         }
 
         .payment-date {
             font-size: 12px;
-            color: #666;
         }
 
         .payment-amount {
             font-size: 16px;
             font-weight: 500;
-            color: #000;
         }
 
         .link-section {
@@ -267,12 +294,12 @@
         }
 
         .link-section a {
-            color: rgb(0 96 223);
+            color: var(--primary-color);
             /* text-decoration: none; */
         }
 
         .link-section a:hover {
-            color: rgb(0 96 223);
+            color: var(--primary-color);
             background-color: rgba(255, 255, 0, 0.329);
 
         }
@@ -285,19 +312,13 @@
         .trip-title {
             font-size: 12px;
             font-weight: 500;
-            color: #000;
             margin-bottom: 24px;
         }
 
         .trip-info {
             font-size: 12px;
-            color: #666;
             margin-bottom: 15px;
             /* max-width: 26ch; */
-        }
-
-        .trip-info span {
-            color: #000;
         }
 
         .location-row {
@@ -322,17 +343,17 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background-color: #000;
+            background-color: var(--black-900);
             position: relative;
             z-index: 2;
         }
 
         .location-row:first-of-type .location-icon::before {
-            background-color: #000;
+            background-color: var(--black-900);
         }
 
         .location-row:last-of-type .location-icon::before {
-            background-color: #000;
+            background-color: var(--black-900);
             width: 10px;
             height: 10px;
         }
@@ -342,7 +363,7 @@
             position: absolute;
             width: 2px;
             height: 45px;
-            background-color: #ddd;
+            background-color: var(--black-300);
             top: 12px;
             left: 9px;
             z-index: 1;
@@ -354,18 +375,12 @@
 
         .location-time {
             font-weight: 500;
-            color: #000;
             margin-right: 5px;
-        }
-
-        .location-address {
-            color: #666;
         }
 
         .footer-note {
             padding: 0px 0;
             font-size: 10px;
-            color: #666;
             line-height: 1.2;
         }
 
@@ -379,7 +394,7 @@
             }
 
             body {
-                background-color: white;
+                background-color: var(--white-100);
                 padding: 0;
             }
 
