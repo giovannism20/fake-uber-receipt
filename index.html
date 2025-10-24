@@ -669,7 +669,6 @@
             const tripPrice = parseValue(document.getElementById('tripPrice').value);
             const fee = parseValue(document.getElementById('fee').value);
             const fixedCost = parseValue(document.getElementById('fixedCost').value);
-            const discount = parseValue(document.getElementById('discount').value);
             const paymentMethod = document.getElementById('paymentMethod').value;
             const paymentDateTime = document.getElementById('paymentDateTime').value;
             const driverName = document.getElementById('driverName').value;
@@ -681,9 +680,9 @@
             const endTime = document.getElementById('endTime').value;
             const endAddress = document.getElementById('endAddress').value;
 
-            // Calcular valores
+            // Calcular valores (removendo o desconto do cálculo)
             const subtotal = tripPrice + fee;
-            const total = subtotal + fixedCost - discount;
+            const total = subtotal + fixedCost;
 
             // Definir mensagem do período
             let periodMessage = '';
@@ -704,7 +703,6 @@
             document.getElementById('displayFee').textContent = `R$ ${formatValue(fee)}`;
             document.getElementById('displaySubtotal').textContent = `R$ ${formatValue(subtotal)}`;
             document.getElementById('displayFixedCost').textContent = `R$ ${formatValue(fixedCost)}`;
-            document.getElementById('displayDiscount').textContent = `-R$ ${formatValue(discount)}`;
 
             // Atualizar ícone de pagamento
             const paymentIcon = document.getElementById('displayPaymentIcon');
