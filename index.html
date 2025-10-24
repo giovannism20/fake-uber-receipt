@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Recibo Uber</title>
+    <style>
+        @page {
+            margin: 0;
+            size: auto;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .form-container h2 {
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+        .btn-generate {
+            width: 100%;
+            padding: 12px;
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-generate:hover {
+            background-color: #333;
+        }
+
+        .btn-print {
+            width: 100%;
+            padding: 12px;
+            background-color: #00d4aa;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-print:hover {
+            background-color: #00c29a;
+        }
+
+        .receipt-container {
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo {
+            height: 25px;
+        }
+
+        .logo img {
+            height: 100%;
+            width: auto;
+        }
+
+        .date {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 400;
+            color: #000;
+            margin: 30px 0 10px 0;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .total-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .total-label {
+            font-size: 18px;
+            font-weight: 500;
+            color: #000;
+        }
+
+        .total-value {
+            font-size: 24px;
+            font-weight: 500;
+            color: #000;
+        }
+
+        .details-section {
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .detail-label {
+            color: #666;
+        }
+
+        .detail-value {
+            color: #000;
+        }
+
+        .breakdown-section {
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        .breakdown-label {
+            color: #000;
+        }
+
+        .breakdown-value {
+            color: #000;
+        }
+
+        .discount {
+            color: #0a0 !important;
+        }
+
+        .payment-section {
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .payment-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #000;
+            margin-bottom: 15px;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .payment-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .payment-icon {
+            width: 30px;
+            height: 30px;
+            background-color: #00d4aa;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .payment-details {
+            font-size: 14px;
+            color: #000;
+        }
+
+        .payment-date {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .payment-amount {
+            font-size: 16px;
+            font-weight: 500;
+            color: #000;
+        }
+
+        .link-section {
+            margin: 15px 0;
+            font-size: 13px;
+        }
+
+        .link-section a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .trip-section {
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .trip-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #000;
+            margin-bottom: 5px;
+        }
+
+        .trip-info {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .location-row {
+            display: flex;
+            align-items: flex-start;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+
+        .location-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .location-icon::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #000;
+            position: relative;
+            z-index: 2;
+        }
+
+        .location-row:first-of-type .location-icon::before {
+            background-color: #000;
+        }
+
+        .location-row:last-of-type .location-icon::before {
+            background-color: #000;
+            width: 10px;
+            height: 10px;
+        }
+
+        .location-row:first-of-type .location-icon::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 45px;
+            background-color: #ddd;
+            top: 12px;
+            left: 9px;
+            z-index: 1;
+        }
+
+        .location-details {
+            flex: 1;
+        }
+
+        .location-time {
+            font-weight: 500;
+            color: #000;
+            margin-right: 5px;
+        }
+
+        .location-address {
+            color: #666;
+        }
+
+        .footer-note {
+            padding: 20px 0;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        @media print {
+            .form-container {
+                display: none;
+            }
+            .container {
+                grid-template-columns: 1fr;
+            }
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .receipt-container {
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Dados do Recibo</h2>
+            <form id="receiptForm">
+                <div class="form-group">
+                    <label>Data</label>
+                    <input type="text" id="date" value="23 de setembro de 2025">
+                </div>
+                <div class="form-group">
+                    <label>Nome do Passageiro</label>
+                    <input type="text" id="passengerName" value="Lorem">
+                </div>
+                <div class="form-group">
+                    <label>Preço da Viagem (R$)</label>
+                    <input type="text" id="tripPrice" value="19,53">
+                </div>
+                <div class="form-group">
+                    <label>Taxa de Intermediação (R$)</label>
+                    <input type="text" id="fee" value="0,90">
+                </div>
+                <div class="form-group">
+                    <label>Custo Fixo (R$)</label>
+                    <input type="text" id="fixedCost" value="1,55">
+                </div>
+                <div class="form-group">
+                    <label>Descontos e Ajustes (R$)</label>
+                    <input type="text" id="discount" value="1,01">
+                </div>
+                <div class="form-group">
+                    <label>Método de Pagamento</label>
+                    <input type="text" id="paymentMethod" value="PIX">
+                </div>
+                <div class="form-group">
+                    <label>Data/Hora do Pagamento</label>
+                    <input type="text" id="paymentDateTime" value="23/9/2025 21:01">
+                </div>
+                <div class="form-group">
+                    <label>Nome do Motorista</label>
+                    <input type="text" id="driverName" value="Denilson">
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Viagem</label>
+                    <input type="text" id="tripType" value="UberX">
+                </div>
+                <div class="form-group">
+                    <label>Distância (Km)</label>
+                    <input type="text" id="distance" value="11.79">
+                </div>
+                <div class="form-group">
+                    <label>Duração (minutos)</label>
+                    <input type="text" id="duration" value="14">
+                </div>
+                <div class="form-group">
+                    <label>Horário de Partida</label>
+                    <input type="text" id="startTime" value="20:46">
+                </div>
+                <div class="form-group">
+                    <label>Endereço de Partida</label>
+                    <input type="text" id="startAddress" value="R. Teles, 129 - Campinho, Rio de Janeiro - RJ, 00000-000, Brasil">
+                </div>
+                <div class="form-group">
+                    <label>Horário de Chegada</label>
+                    <input type="text" id="endTime" value="21:01">
+                </div>
+                <div class="form-group">
+                    <label>Endereço de Chegada</label>
+                    <input type="text" id="endAddress" value="Av. dos Democráticos, 1322 - Higienópolis, Rio de Janeiro - RJ, 21050-144, Brasil">
+                </div>
+                <button type="button" class="btn-generate" onclick="generateReceipt()">Gerar Recibo</button>
+                <button type="button" class="btn-print" onclick="window.print()">Imprimir/Salvar PDF</button>
+            </form>
+        </div>
+
+        <div class="receipt-container">
+            <div class="header">
+                <div class="logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="Uber">
+                </div>
+                <div class="date" id="displayDate">23 de setembro de 2025</div>
+            </div>
+
+            <h1 class="title" id="displayTitle">Obrigado por escolher a Uber, Lorem</h1>
+            <p class="subtitle">Esperamos que você tenha gostado da viagem hoje à noite.</p>
+
+            <div class="total-section">
+                <div class="total-label">Total</div>
+                <div class="total-value" id="displayTotal">R$ 20,97</div>
+            </div>
+
+            <div class="details-section">
+                <div class="detail-row">
+                    <span class="detail-label">Preço da viagem</span>
+                    <span class="detail-value" id="displayTripPrice">R$ 19,53</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Taxa de intermediação</span>
+                    <span class="detail-value" id="displayFee">R$ 0,90</span>
+                </div>
+            </div>
+
+            <div class="breakdown-section">
+                <div class="breakdown-row">
+                    <span class="breakdown-label">Subtotal</span>
+                    <span class="breakdown-value" id="displaySubtotal">R$ 20,43</span>
+                </div>
+                <div class="breakdown-row">
+                    <span class="breakdown-label">Custo fixo</span>
+                    <span class="breakdown-value" id="displayFixedCost">R$ 1,55</span>
+                </div>
+                <div class="breakdown-row">
+                    <span class="breakdown-label">Descontos e ajustes</span>
+                    <span class="breakdown-value discount" id="displayDiscount">-R$ 1,01</span>
+                </div>
+            </div>
+
+            <div class="payment-section">
+                <div class="payment-title">Pagamentos</div>
+                <div class="payment-method">
+                    <div class="payment-info">
+                        <div class="payment-icon" id="displayPaymentIcon">PIX</div>
+                        <div>
+                            <div class="payment-details" id="displayPaymentMethod">PIX</div>
+                            <div class="payment-date" id="displayPaymentDateTime">23/9/2025 21:01</div>
+                        </div>
+                    </div>
+                    <div class="payment-amount" id="displayPaymentAmount">R$ 20,97</div>
+                </div>
+                <div class="link-section">
+                    Para mais informações, <a href="#">acesse a página da sua viagem</a>
+                </div>
+            </div>
+
+            <div class="trip-section">
+                <div class="trip-title" id="displayDriverName">Você viajou com Denilson</div>
+                <div class="trip-info" id="displayTripInfo">UberX 11.79 Quilômetros | 14 minutos</div>
+                <div class="location-row">
+                    <div class="location-icon"></div>
+                    <div class="location-details">
+                        <span class="location-time" id="displayStartTime">20:46 |</span>
+                        <span class="location-address" id="displayStartAddress">R. Teles, 129 - Campinho, Rio de Janeiro - RJ, 00000-000, Brasil</span>
+                    </div>
+                </div>
+                <div class="location-row">
+                    <div class="location-icon"></div>
+                    <div class="location-details">
+                        <span class="location-time" id="displayEndTime">21:01 |</span>
+                        <span class="location-address" id="displayEndAddress">Av. dos Democráticos, 1322 - Higienópolis, Rio de Janeiro - RJ, 21050-144, Brasil</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-note">
+                O preço de serviço não inclui taxas que possam ser cobradas pelo seu banco. Entre em contato diretamente com o seu banco para mais informações.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function parseValue(value) {
+            return parseFloat(value.replace(',', '.'));
+        }
+
+        function formatValue(value) {
+            return value.toFixed(2).replace('.', ',');
+        }
+
+        function generateReceipt() {
+            // Obter valores do formulário
+            const date = document.getElementById('date').value;
+            const passengerName = document.getElementById('passengerName').value;
+            const tripPrice = parseValue(document.getElementById('tripPrice').value);
+            const fee = parseValue(document.getElementById('fee').value);
+            const fixedCost = parseValue(document.getElementById('fixedCost').value);
+            const discount = parseValue(document.getElementById('discount').value);
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const paymentDateTime = document.getElementById('paymentDateTime').value;
+            const driverName = document.getElementById('driverName').value;
+            const tripType = document.getElementById('tripType').value;
+            const distance = document.getElementById('distance').value;
+            const duration = document.getElementById('duration').value;
+            const startTime = document.getElementById('startTime').value;
+            const startAddress = document.getElementById('startAddress').value;
+            const endTime = document.getElementById('endTime').value;
+            const endAddress = document.getElementById('endAddress').value;
+
+            // Calcular valores
+            const subtotal = tripPrice + fee;
+            const total = subtotal + fixedCost - discount;
+
+            // Atualizar recibo
+            document.getElementById('displayDate').textContent = date;
+            document.getElementById('displayTitle').textContent = `Obrigado por escolher a Uber, ${passengerName}`;
+            document.getElementById('displayTotal').textContent = `R$ ${formatValue(total)}`;
+            document.getElementById('displayTripPrice').textContent = `R$ ${formatValue(tripPrice)}`;
+            document.getElementById('displayFee').textContent = `R$ ${formatValue(fee)}`;
+            document.getElementById('displaySubtotal').textContent = `R$ ${formatValue(subtotal)}`;
+            document.getElementById('displayFixedCost').textContent = `R$ ${formatValue(fixedCost)}`;
+            document.getElementById('displayDiscount').textContent = `-R$ ${formatValue(discount)}`;
+            document.getElementById('displayPaymentIcon').textContent = paymentMethod;
+            document.getElementById('displayPaymentMethod').textContent = paymentMethod;
+            document.getElementById('displayPaymentDateTime').textContent = paymentDateTime;
+            document.getElementById('displayPaymentAmount').textContent = `R$ ${formatValue(total)}`;
+            document.getElementById('displayDriverName').textContent = `Você viajou com ${driverName}`;
+            document.getElementById('displayTripInfo').textContent = `${tripType} ${distance} Quilômetros | ${duration} minutos`;
+            document.getElementById('displayStartTime').textContent = `${startTime} |`;
+            document.getElementById('displayStartAddress').textContent = startAddress;
+            document.getElementById('displayEndTime').textContent = `${endTime} |`;
+            document.getElementById('displayEndAddress').textContent = endAddress;
+        }
+
+        // Gerar recibo ao carregar a página
+        window.onload = generateReceipt;
+    </script>
+</body>
+</html>
