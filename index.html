@@ -263,14 +263,14 @@
 
         .payment-info {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 10px;
         }
 
         .payment-icon {
             width: 30px;
             height: 30px;
-            background-color: var(--primary-color);
+            /* background-color: var(--primary-color); */
             border-radius: 4px;
             display: flex;
             align-items: center;
@@ -278,6 +278,13 @@
             color: white;
             font-size: 12px;
             font-weight: bold;
+            display: block;
+        }
+
+        .payment-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .payment-details {
@@ -539,7 +546,9 @@
                 <div class="payment-title">Pagamentos</div>
                 <div class="payment-method">
                     <div class="payment-info">
-                        <div class="payment-icon" id="displayPaymentIcon">PIX</div>
+                        <picture class="payment-icon" id="displayPaymentIcon">
+                            <img src="public/pix.png" alt="PIX">
+                        </picture>
                         <div>
                             <div class="payment-details" id="displayPaymentMethod">PIX</div>
                             <div class="payment-date" id="displayPaymentDateTime">23/9/2025 21:01</div>
@@ -621,7 +630,15 @@
             document.getElementById('displaySubtotal').textContent = `R$ ${formatValue(subtotal)}`;
             document.getElementById('displayFixedCost').textContent = `R$ ${formatValue(fixedCost)}`;
             document.getElementById('displayDiscount').textContent = `-R$ ${formatValue(discount)}`;
-            document.getElementById('displayPaymentIcon').textContent = paymentMethod;
+
+            // Atualizar ícone de pagamento
+            const paymentIcon = document.getElementById('displayPaymentIcon');
+            if (paymentMethod.toUpperCase() === 'PIX') {
+                paymentIcon.innerHTML = '<img src="public/pix.png" alt="PIX">';
+            } else {
+                paymentIcon.textContent = paymentMethod;
+            }
+
             document.getElementById('displayPaymentMethod').textContent = paymentMethod;
             document.getElementById('displayPaymentDateTime').textContent = paymentDateTime;
             document.getElementById('displayPaymentAmount').textContent = `R$ ${formatValue(total)}`;
