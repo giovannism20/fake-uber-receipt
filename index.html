@@ -9,7 +9,7 @@
         :root {
             --primary-color: #4d4df3;
             --black-900: #000;
-            --black-600: #808080;
+            --black-600: #595959;
             --black-300: #e0e0e0;
             --black-100: #f5f5f5;
             --white-100: #ffffff;
@@ -55,7 +55,7 @@
 
 
         .total-section {
-            border-bottom: 2px solid var(--black-900);
+            border-bottom: 1.5px solid var(--black-900);
         }
 
         .header {
@@ -81,6 +81,9 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
         }
 
         body {
@@ -334,16 +337,32 @@
             /* max-width: 26ch; */
         }
 
+        .location-wrapper {
+            position: relative;
+        }
+
+        .location-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 1.5px;
+            height: calc(100% - 24px);
+            background-color: var(--black-900);
+            left: calc(16px - 4.5px);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
         .location-row {
             display: flex;
             align-items: flex-start;
+            align-items: center;
             margin: 10px 0;
             font-size: 13px;
         }
 
         .location-icon {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             margin-right: 10px;
             display: flex;
             align-items: center;
@@ -351,35 +370,12 @@
             position: relative;
         }
 
-        .location-icon::before {
-            content: '';
+        .location-icon .location-icon-dot {
             width: 8px;
             height: 8px;
-            border-radius: 50%;
             background-color: var(--black-900);
             position: relative;
             z-index: 2;
-        }
-
-        .location-row:first-of-type .location-icon::before {
-            background-color: var(--black-900);
-        }
-
-        .location-row:last-of-type .location-icon::before {
-            background-color: var(--black-900);
-            width: 10px;
-            height: 10px;
-        }
-
-        .location-row:first-of-type .location-icon::after {
-            content: '';
-            position: absolute;
-            width: 2px;
-            height: 45px;
-            background-color: var(--black-300);
-            top: 12px;
-            left: 9px;
-            z-index: 1;
         }
 
         .location-details {
@@ -413,6 +409,25 @@
 
             .receipt-container {
                 box-shadow: none;
+            }
+
+            /* Forçar impressão de cores e pseudo-elementos */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            .location-wrapper::before {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            .location-icon .location-icon-dot {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
             }
         }
 
@@ -564,22 +579,33 @@
             <div class="trip-section">
                 <div class="trip-title" id="displayDriverName">Você viajou com Denilson</div>
                 <div class="trip-info" id="displayTripInfo"><b>UberX</b> 11.79 Quilômetros | 14 minutos</div>
-                <div class="location-row">
-                    <div class="location-icon"></div>
-                    <div class="location-details">
-                        <span class="location-time" id="displayStartTime">20:46 |</span>
-                        <span class="location-address" id="displayStartAddress">R. Teles, 129 - Campinho, Rio de Janeiro
-                            - RJ, 00000-000, Brasil</span>
+
+                <div class="location-wrapper">
+
+                    <div class="location-row">
+                        <div class="location-icon">
+                            <div class="location-icon-dot"></div>
+                        </div>
+                        <div class="location-details">
+                            <span class="location-time" id="displayStartTime">20:46 |</span>
+                            <span class="location-address" id="displayStartAddress">R. Teles, 129 - Campinho, Rio de
+                                Janeiro
+                                - RJ, 00000-000, Brasil</span>
+                        </div>
+                    </div>
+                    <div class="location-row">
+                        <div class="location-icon">
+                            <div class="location-icon-dot"></div>
+                        </div>
+                        <div class="location-details">
+                            <span class="location-time" id="displayEndTime">21:01 |</span>
+                            <span class="location-address" id="displayEndAddress">Av. dos Democráticos, 1322 -
+                                Higienópolis,
+                                Rio de Janeiro - RJ, 21050-144, Brasil</span>
+                        </div>
                     </div>
                 </div>
-                <div class="location-row">
-                    <div class="location-icon"></div>
-                    <div class="location-details">
-                        <span class="location-time" id="displayEndTime">21:01 |</span>
-                        <span class="location-address" id="displayEndAddress">Av. dos Democráticos, 1322 - Higienópolis,
-                            Rio de Janeiro - RJ, 21050-144, Brasil</span>
-                    </div>
-                </div>
+
             </div>
 
             <div class="footer-note">
