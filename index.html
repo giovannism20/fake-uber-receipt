@@ -605,7 +605,7 @@
                     <div class="payment-amount" id="displayPaymentAmount">R$ 20,97</div>
                 </div>
                 <div class="link-section">
-                    Para mais informações,<a href="#">acesse a página da sua viagem</a>
+                    Para mais informações,<a href="https://riders.uber.com/trips/e93856e5-b9f7-4196-911f-96bed9212765">acesse a página da sua viagem</a>
                 </div>
             </div>
 
@@ -661,7 +661,18 @@
             return value.toFixed(2).replace('.', ',');
         }
 
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
         function generateReceipt() {
+            // Gerar UUID aleatório para a corrida
+            const tripUUID = generateUUID();
+
             // Obter valores do formulário
             const date = document.getElementById('date').value;
             const passengerName = document.getElementById('passengerName').value;
@@ -721,6 +732,10 @@
             document.getElementById('displayStartAddress').textContent = startAddress;
             document.getElementById('displayEndTime').textContent = `${endTime} |`;
             document.getElementById('displayEndAddress').textContent = endAddress;
+
+            // Atualizar o link com o UUID gerado
+            const tripLink = document.querySelector('.link-section a');
+            tripLink.href = `https://riders.uber.com/trips/${tripUUID}`;
         }
 
         // Gerar recibo ao carregar a página
